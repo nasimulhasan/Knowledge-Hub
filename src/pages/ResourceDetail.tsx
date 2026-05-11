@@ -27,7 +27,7 @@ import {
   Shield,
   Edit3,
   Save,
-  X as CloseIcon,
+  X,
   Trash2,
   AlertTriangle
 } from 'lucide-react';
@@ -129,6 +129,21 @@ export function ResourceDetail() {
     }
   };
 
+  const handleStartEdit = () => {
+    if (item) {
+      setEditData({
+        title: item.title,
+        description: item.description,
+        content: item.content || '',
+        tags: item.tags || [],
+        type: item.type,
+        fileUrl: item.fileUrl || '',
+        isObsolete: item.isObsolete || false
+      });
+      setIsEditing(true);
+    }
+  };
+
   const handleUpdate = async () => {
     if (!id) return;
     try {
@@ -188,7 +203,7 @@ export function ResourceDetail() {
           <div className="flex gap-3">
             {!isEditing ? (
               <button 
-                onClick={() => setIsEditing(true)}
+                onClick={handleStartEdit}
                 className="flex items-center gap-2 bg-primary-950 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-primary-950/20"
               >
                 <Edit3 className="w-4 h-4 text-accent-400" />
@@ -200,7 +215,7 @@ export function ResourceDetail() {
                   onClick={() => setIsEditing(false)}
                   className="flex items-center gap-2 bg-white text-gray-500 border border-gray-100 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all font-mono"
                 >
-                  <CloseIcon className="w-4 h-4" />
+                  <X className="w-4 h-4" />
                   Discard
                 </button>
                 <button 
