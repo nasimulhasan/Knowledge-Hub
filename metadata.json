@@ -1,0 +1,6 @@
+{
+  "name": "Brac Migration Knowledge Hub",
+  "description": "An internal knowledge hub and wiki for Brac Migration programme featuring resource management, role-based access control, approval workflows, version history, and discussion sections.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

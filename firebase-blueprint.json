@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a user in the system with specific roles and permissions.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique Firebase Auth UID." },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["SUPER_ADMIN", "CONTRIBUTOR", "VIEWER"], "description": "Access level of the user." },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "ContentItem": {
+      "title": "Content Item",
+      "description": "Base entity for files, posts, wiki entries, and courses.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["file", "post", "wiki", "course"] },
+        "url": { "type": "string", "description": "URL for courses or files." },
+        "content": { "type": "string", "description": "Markdown text for wiki/posts." },
+        "status": { "type": "string", "enum": ["pending", "approved", "declined"] },
+        "creatorId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "reviewerId": { "type": "string" },
+        "reviewComments": { "type": "string" },
+        "version": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type", "status", "creatorId"]
+    },
+    "Version": {
+      "title": "Version History",
+      "description": "A snapshot of a content item at a specific point in time.",
+      "type": "object",
+      "properties": {
+        "data": { "type": "object", "description": "The content data at this version." },
+        "versionNumber": { "type": "number" },
+        "changedBy": { "type": "string" },
+        "changeSummary": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["data", "versionNumber", "changedBy", "createdAt"]
+    },
+    "Comment": {
+      "title": "Discussion Comment",
+      "description": "A message in the discussion section of a content item.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "message", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "User profile and role information."
+    },
+    "/content/{contentId}": {
+      "schema": { "$ref": "ContentItem" },
+      "description": "Main collection for hub resources (wiki, posts, etc.)."
+    },
+    "/content/{contentId}/versions/{versionId}": {
+      "schema": { "$ref": "Version" },
+      "description": "Historical snapshots of content items."
+    },
+    "/content/{contentId}/comments/{commentId}": {
+      "schema": { "$ref": "Comment" },
+      "description": "Discussion thread for a specific content item."
+    }
+  }
+}
